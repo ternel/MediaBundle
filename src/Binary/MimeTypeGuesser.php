@@ -24,8 +24,18 @@ class MimeTypeGuesser
     {
         $temporaryFile = tempnam(sys_get_temp_dir(), 'media');
         file_put_contents($temporaryFile, $content);
-        $mimeType = $this->mimeTypeGuesser->guessMimeType($temporaryFile);
-        unlink($temporaryFile);
+
+        try {
+            // MimeTypes::guessMimeType() skips the guessers that the runtime
+            // does not support (eg. FileBinaryMimeTypeGuesser without the
+            // "file" binary), while calling a guesser directly throws in this
+            // case: use it first, and keep the injected guesser as a fallback
+            // when the chain came up empty-handed
+            $mimeType = $this->mimeTypes->guessMimeType($temporaryFile);
+            $mimeType ??= $this->mimeTypeGuesser->guessMimeType($temporaryFile);
+        } finally {
+            unlink($temporaryFile);
+        }
 
         return $mimeType ?? 'application/octet-stream';
     }

@@ -15,16 +15,26 @@ body.joli-media-explore .content-top {
 
 /* A segmented control: a recessed track holding the available view modes, the selected one
    being raised as a "pill". EasyAdmin has no segmented control component, so this is built
-   out of its design tokens; every token used here exists from EasyAdmin 4.26 to 5.3, and the
-   control follows the theme (including the dark one) on its own.
+   out of its design tokens.
+
+   The same visual state is spelled twice: EasyAdmin up to 5.8 styles its buttons through
+   the "--button-*" design tokens, while the redesigned default theme of EasyAdmin 5.9
+   paints them through the Bootstrap layer ("--bs-btn-*" design tokens). Both are set
+   here, so the control keeps working with every supported version and follows the
+   theme (including the dark one) on its own.
 
    This replaces a plain Bootstrap button group, which read as two separate buttons instead of
    one option selected among two, and which relied on how EasyAdmin painted disabled buttons --
    something that changed in EasyAdmin 5.3, where they became faded instead of looking pressed. */
 .joli-media-view-switch {
+  --joli-media-view-switch-pill-bg: var(--button-secondary-bg, var(--button-default-light-bg));
+  --joli-media-view-switch-pill-border-color: var(--button-secondary-border-color, transparent);
+  --joli-media-view-switch-pill-color: var(--button-secondary-color, var(--button-default-color));
+  --joli-media-view-switch-pill-box-shadow: var(--button-secondary-box-shadow, none);
+
   display: inline-flex;
-  gap: var(--ea-sp-0-5, 2px);
-  padding: var(--ea-sp-0-5, 2px);
+  gap: var(--ea-sp-0-5, var(--ea-sp-1, 2px));
+  padding: var(--ea-sp-0-5, var(--ea-sp-1, 2px));
   background: var(--secondary-bg);
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--border-radius-lg);
@@ -36,6 +46,15 @@ body.joli-media-explore .content-top {
     --button-color: var(--text-muted);
     --button-hover-bg: transparent;
     --button-hover-color: var(--text-color);
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: transparent;
+    --bs-btn-color: var(--text-muted);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: transparent;
+    --bs-btn-disabled-color: var(--text-muted);
+    --bs-btn-hover-bg: transparent;
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-hover-color: var(--text-color);
 
     border-radius: var(--border-radius);
   }
@@ -43,10 +62,18 @@ body.joli-media-explore .content-top {
   /* the selected view mode is rendered as "active disabled" so that it cannot be selected
      again; raise it as a pill and cancel the opacity applied to disabled buttons */
   .btn.active {
-    --button-bg: var(--button-secondary-bg);
-    --button-border-color: var(--button-secondary-border-color);
-    --button-color: var(--button-secondary-color);
-    --button-box-shadow: var(--button-secondary-box-shadow);
+    --button-bg: var(--joli-media-view-switch-pill-bg);
+    --button-border-color: var(--joli-media-view-switch-pill-border-color);
+    --button-color: var(--joli-media-view-switch-pill-color);
+    --button-box-shadow: var(--joli-media-view-switch-pill-box-shadow);
+    --bs-btn-active-bg: var(--joli-media-view-switch-pill-bg);
+    --bs-btn-active-border-color: var(--joli-media-view-switch-pill-border-color);
+    --bs-btn-active-color: var(--joli-media-view-switch-pill-color);
+    --bs-btn-bg: var(--joli-media-view-switch-pill-bg);
+    --bs-btn-color: var(--joli-media-view-switch-pill-color);
+    --bs-btn-disabled-bg: var(--joli-media-view-switch-pill-bg);
+    --bs-btn-disabled-border-color: var(--joli-media-view-switch-pill-border-color);
+    --bs-btn-disabled-color: var(--joli-media-view-switch-pill-color);
 
     opacity: 1;
   }
